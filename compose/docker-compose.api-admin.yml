@@ -1,0 +1,31 @@
+version: '3.2'
+
+services:
+  kimby-api-admin:
+    build:
+      dockerfile: Dockerfile
+      context: ../../api-admin
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=4001
+      - AUTH_GRPC_URL=kimby-grpc-auth
+      - AUTH_GRPC_PORT=10001
+      - USERS_GRPC_URL=kimby-grpc-users
+      - USERS_GRPC_PORT=10002
+      - NOTIFICATIONS_GRPC_URL=kimby-grpc-notifications
+      - NOTIFICATIONS_GRPC_PORT=10003
+      - OFFERS_GRPC_URL=kimby-grpc-offerings
+      - OFFERS_GRPC_PORT=10004
+      - INVENTORY_GRPC_URL=kimby-grpc-inventory
+      - INVENTORY_GRPC_PORT=10005
+      - ORDERS_GRPC_URL=kimby-grpc-orders
+      - ORDERS_GRPC_PORT=10006
+      - PAYMENTS_GRPC_URL=kimby-grpc-payments
+      - PAYMENTS_GRPC_PORT=10007
+    volumes:
+      - /app/node_modules
+      - ../../api-admin:/app
+    ports:
+      - '4001:4001'
+    restart: always

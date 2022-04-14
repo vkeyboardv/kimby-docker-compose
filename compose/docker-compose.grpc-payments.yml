@@ -1,0 +1,23 @@
+version: '3.2'
+
+services:
+  kimby-grpc-payments:
+    build:
+      dockerfile: Dockerfile
+      context: ../../grpc-payments
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=10007
+      - HOST=kimby-grpc-payments
+      - PROTO_PATH=./service.proto
+      - STRIPE_PUBLIC_KEY=test
+      - STRIPE_SECRET_KEY=test
+      - USERS_GRPC_URL=kimby-grpc-users
+      - USERS_GRPC_PORT=10002
+    volumes:
+      - /app/node_modules
+      - ../../grpc-payments:/app
+    ports:
+      - '10007:10007'
+    restart: always

@@ -1,0 +1,25 @@
+version: '3.2'
+
+services:
+  kimby-grpc-auth:
+    build:
+      dockerfile: Dockerfile
+      context: ../../grpc-auth
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=10001
+      - HOST=kimby-grpc-auth
+      - PROTO_PATH=./service.proto
+      - REDIS_CACHE_URL=kimby-redis:6379
+      - AUTH_JWT_SECRET=hello
+      - REFRESH_TOKEN_EXPIRATION=100000
+      - ACCESS_TOKEN_EXPIRATION=100000
+      - USERS_GRPC_URL=kimby-grpc-users
+      - USERS_GRPC_PORT=10002
+    volumes:
+      - /app/node_modules
+      - ../../grpc-auth:/app
+    ports:
+      - '10001:10001'
+    restart: always

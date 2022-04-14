@@ -1,0 +1,23 @@
+version: '3.2'
+
+services:
+  kimby-grpc-orders:
+    build:
+      dockerfile: Dockerfile
+      context: ../../grpc-orders
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=10006
+      - HOST=kimby-grpc-orders
+      - PROTO_PATH=./service.proto
+      - MONGODB_URL=mongodb://root:example@kimby-mongo:27017/
+      - ORDER_LOCK_TIME=5
+      - OFFERS_GRPC_URL=kimby-grpc-offerings
+      - OFFERS_GRPC_PORT=10004
+    volumes:
+      - /app/node_modules
+      - ../../grpc-orders:/app
+    ports:
+      - '10006:10006'
+    restart: always

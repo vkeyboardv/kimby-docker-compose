@@ -1,0 +1,19 @@
+version: '3.2'
+
+services:
+  kimby-grpc-notifications:
+    build:
+      dockerfile: Dockerfile
+      context: ../../grpc-notifications
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=10003
+      - HOST=kimby-grpc-notifications
+      - PROTO_PATH=./service.proto
+    volumes:
+      - /app/node_modules
+      - ../../grpc-notifications:/app
+    ports:
+      - '10003:10003'
+    restart: always

@@ -1,0 +1,20 @@
+version: '3.2'
+
+services:
+  kimby-grpc-inventory:
+    build:
+      dockerfile: Dockerfile
+      context: ../../grpc-inventory
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=10005
+      - HOST=kimby-grpc-inventory
+      - PROTO_PATH=./service.proto
+      - MONGODB_URL=mongodb://root:example@kimby-mongo:27017/
+    volumes:
+      - /app/node_modules
+      - ../../grpc-inventory:/app
+    ports:
+      - '10005:10005'
+    restart: always

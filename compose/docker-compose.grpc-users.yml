@@ -1,0 +1,20 @@
+version: '3.2'
+
+services:
+  kimby-grpc-users:
+    build:
+      dockerfile: Dockerfile
+      context: ../../grpc-users
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=10002
+      - HOST=kimby-grpc-users
+      - PROTO_PATH=./service.proto
+      - MONGODB_URL=mongodb://root:example@kimby-mongo:27017/
+    volumes:
+      - /app/node_modules
+      - ../../grpc-users:/app
+    ports:
+      - '10002:10002'
+    restart: always

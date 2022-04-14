@@ -1,0 +1,57 @@
+version: '3.2'
+
+services:
+  kimby-api-dashboard:
+    build:
+      dockerfile: Dockerfile
+      context: ../../api-dashboard
+      args:
+        NODE_AUTH_TOKEN: ${NODE_AUTH_TOKEN}
+    environment:
+      - PORT=4000
+      - AUTH_GRPC_URL=kimby-grpc-auth
+      - AUTH_GRPC_PORT=10001
+      - USERS_GRPC_URL=kimby-grpc-users
+      - USERS_GRPC_PORT=10002
+      - NOTIFICATIONS_GRPC_URL=kimby-grpc-notifications
+      - NOTIFICATIONS_GRPC_PORT=10003
+      - OFFERS_GRPC_URL=kimby-grpc-offerings
+      - OFFERS_GRPC_PORT=10004
+      - INVENTORY_GRPC_URL=kimby-grpc-inventory
+      - INVENTORY_GRPC_PORT=10005
+      - ORDERS_GRPC_URL=kimby-grpc-orders
+      - ORDERS_GRPC_PORT=10006
+      - PAYMENTS_GRPC_URL=kimby-grpc-payments
+      - PAYMENTS_GRPC_PORT=10007
+    volumes:
+      - /app/node_modules
+      - ../../api-dashboard:/app
+    depends_on:
+      - kimby-mongo
+    ports:
+      - '4000:4000'
+    restart: always
+
+  kimby-mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  kimby-mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@kimby-mongo:27017/
+
+  kimby-redis:
+    image: 'redis:latest'
+    ports:
+      - '4242:6379'
